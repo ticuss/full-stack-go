@@ -1,4 +1,5 @@
 FROM golang:1.23-alpine AS build
+RUN apk add --no-cache curl
 
 WORKDIR /app
 
@@ -7,7 +8,10 @@ RUN go mod download
 
 COPY . .
 RUN go install github.com/a-h/templ/cmd/templ@latest && \
-    templ generate
+    templ generate && \
+    curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.10/tailwindcss-linux-x64 -o tailwindcss && \
+    chmod +x tailwindcss && \
+    ./tailwindcss -i cmd/web/styles/input.css -o cmd/web/assets/css/output.css
 
 RUN go build -o main cmd/api/main.go
 
