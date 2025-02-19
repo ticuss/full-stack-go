@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine AS build
+FROM golang:1.24-alpine AS build
 RUN apk add --no-cache curl
 
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN go install github.com/a-h/templ/cmd/templ@latest && \
     chmod +x tailwindcss && \
     ./tailwindcss -i cmd/web/styles/input.css -o cmd/web/assets/css/output.css
 
-RUN go build -o main cmd/api/main.go
+# RUN go build -o main cmd/api/main.go
 
 FROM alpine:3.20.1 AS prod
 WORKDIR /app
