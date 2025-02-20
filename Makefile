@@ -1,5 +1,5 @@
 # Simple Makefile for a Go project
-
+include .env
 # Build the application
 all: build test
 templ-install:
@@ -80,7 +80,17 @@ watch:
         fi
 
 migrate-up:
-	migrate -database "postgres://${BLUEPRINT_DB_USERNAME}:${BLUEPRINT_DB_PASSWORD}@${BLUEPRINT_DB_HOST}:${BLUEPRINT_DB_PORT}/${BLUEPRINT_DB_DATABASE}?sslmode=disable" \
-  -path internal/database/migrations up
+	docker run --rm \
+		--network full-stack-go_blueprint \
+		-v ./internal/database/migrations:/migrations \
+		migrate/migrate \
+		-path=/migrations/ -database "postgres://${BLUEPRINT_DB_USERNAME}:${BLUEPRINT_DB_PASSWORD}@psql_bp:5432/${BLUEPRINT_DB_DATABASE}?sslmode=disable" up
+
+migrate-down:
+	docker run --rm \
+		--network full-stack-go_blueprint \
+		-v ./internal/database/migrations:/migrations \
+		migrate/migrate \
+		-path=/migrations/ -database "postgres://${BLUEPRINT_DB_USERNAME}:${BLUEPRINT_DB_PASSWORD}@psql_bp:5432/${BLUEPRINT_DB_DATABASE}?sslmode=disable" down 1
 
 .PHONY: all build run test clean watch tailwind-install docker-run docker-down itest templ-install migrate

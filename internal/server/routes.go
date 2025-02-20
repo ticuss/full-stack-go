@@ -1,9 +1,9 @@
 package server
 
 import (
+	"full-stack-go/cmd/web"
 	"net/http"
 
-	"full-stack-go/cmd/web"
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -27,6 +27,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	e.GET("/web", echo.WrapHandler(templ.Handler(web.HelloForm())))
 	e.POST("/hello", echo.WrapHandler(http.HandlerFunc(web.HelloWebHandler)))
+	e.GET("/create-user", echo.WrapHandler(templ.Handler(web.HelloForm())))
+	e.POST("/create-user", echo.WrapHandler(templ.Handler(web.CreateUser())))
 
 	e.GET("/", s.HelloWorldHandler)
 
