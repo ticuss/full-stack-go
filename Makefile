@@ -79,4 +79,8 @@ watch:
             fi; \
         fi
 
-.PHONY: all build run test clean watch tailwind-install docker-run docker-down itest templ-install
+migrate-up:
+	migrate -database "postgres://${BLUEPRINT_DB_USERNAME}:${BLUEPRINT_DB_PASSWORD}@${BLUEPRINT_DB_HOST}:${BLUEPRINT_DB_PORT}/${BLUEPRINT_DB_DATABASE}?sslmode=disable" \
+  -path internal/database/migrations up
+
+.PHONY: all build run test clean watch tailwind-install docker-run docker-down itest templ-install migrate
