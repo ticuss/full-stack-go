@@ -22,9 +22,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	fileServer := http.FileServer(http.FS(web.Files))
-	e.GET("/assets/*", echo.WrapHandler(fileServer))
-
 	e.GET("/web", echo.WrapHandler(templ.Handler(web.HelloForm())))
 	e.POST("/hello", echo.WrapHandler(http.HandlerFunc(web.HelloWebHandler)))
 	e.GET("/create-user", echo.WrapHandler(templ.Handler(web.HelloForm())))
